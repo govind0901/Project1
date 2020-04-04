@@ -7,14 +7,14 @@ from django.utils.safestring import mark_safe
 from django.template import Library
 import json
   
-
+my_diction2 ={}
 
 
 def generateXMLFile(request,*args, **kwargs):
 
 	my_diction ={}
 
-	my_diction2 ={}
+	
 	context={} 
 	uploaded_file_list = []
 
