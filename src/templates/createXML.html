@@ -5,6 +5,16 @@
 	{% autoescape off %}
 	<script type="text/javascript">
 
+			function ButtonAction()
+			{
+				var model = document.getElementById('ModelName').value;
+				var field = document.getElementById('modelfield').value;
+				var conto = document.getElementById('Contotype').value;
+				var Label = document.getElementById('Label').value;
+				var show = model + '->' + field + '$$' + conto + '$$' + Label;
+				document.getElementById('text').value = show;
+			}
+
 			function File()
 			{
 				document.getElementById("ModelName").disabled = false;
@@ -31,6 +41,7 @@
 
 				document.getElementById("modelfield").disabled = false;
 				document.getElementById("smodelfield").disabled = false;
+				document.getElementById("button2").disabled = false;
 				var model = document.getElementById('ModelName').value;
 				var sfield = document.getElementById('smodelfield');
 				var mfield = document.getElementById('modelfield');
@@ -91,7 +102,7 @@
 
 			<div style='display:inline-block'>
 
-				<select id="ModelName" onchange='Field()' disabled style="
+				<select id="ModelName" onchange='Field()' style="
 				font-size: 25px;
 				width: 300 px;
 				padding-right: 130px;
@@ -99,10 +110,15 @@
 				padding-top: 10px;
 				padding-bottom: 10px;
 				max-width: 300px;
+				min-widt: 300px;
 
 
 				">
-					<option value="0" selected disabled >Model Name</option>
+					<option value="0" selected disabled>Model Name</option>
+
+					{% for x in my_diction %}
+					<option value={{x}}>{{x}}</option>
+					{% endfor %}
 				</select>
 
 			</div>
@@ -110,12 +126,14 @@
 			<div style='display:inline-block'>
 		
 
-				<select id="SourceModelFile" autofocus name="SourceModelFile" onchange="File()" style="
+				<select id="SourceModelFile" autofocus name="SourceModelFile" style="
 				font-size: 25px;
 				width: 300 px;
 				padding-top: 10px;
 				padding-bottom: 10px;
 				padding-right: 40px;
+				min-width: 300px;
+				max-width: 300px;
 
 
 				">
@@ -131,11 +149,12 @@
 
 				<select required disabled id="modelfield" style="
 				font-size: 25px;
-				width: 300 px;
-				padding-right: 142px;
+				width: 300px;
 				margin-left: 465px;
 				padding-top: 10px;
 				padding-bottom: 10px;
+				max-width: 300px;
+				min-widt: 300px;
 
 
 				">
@@ -147,18 +166,18 @@
 
 				<select required disabled id="smodelfield" style="
 				font-size: 25px;
-				width: 300 px;
-				padding-right: 20px;
+				width: 300px;
 				padding-top: 10px;
 				padding-bottom: 10px;
 				padding-right: 57px;
-
+				max-width: 300px;
+				min-width: 300px;
 
 				">
 					<option value="0" selected disabled >Source Model Field</option>
 				</select>
 			</div>
-		</br>
+		
 
 			<div style='display:inline-block'>
 
@@ -170,15 +189,36 @@
 				padding-right: 101px;
 				padding-top: 10px;
 				padding-bottom: 10px;
+				max-width: 300px;
+				min-width: 300px;
+
+
+				<!--          Looking for more such option. Please add more options here, if they are             -->
 
 
 				">
-					<option value="0">Contotype</option>
-					<option value="input-email">input-email</option>
-					<option value="input-password">input-password</option>
-					<option value="select-custom">select-custom</option>
-					<option value="select-fromdb">select-fromdb</option>
+					<option value="0">Contotype</option>                    
+					<option value="input$$text">input$$text</option>
+					<option value="input$$email">input$$email</option>
+					<option value="input$$date&time">input$$date&time</option>
+					<option value="select-fromdb">input$$number</option>
 				</select>
+
+			</div style='display:inline-block'>
+
+				<input type="text" name="Label" placeholder="Labels" id="Label" style="
+
+				font-size: 25px;
+				width:300px;
+				padding-top: 9px;
+				padding-bottom: 9px;
+				margin-top: 10px;
+				padding-right: 0px;
+				max-width: 300px;
+				min-widt: 300px;
+
+				">
+
 
 			</div>
 
@@ -186,12 +226,14 @@
 
 				<input type="text" placeholder="Comma seperated values" required id ="Commaval" style="
 				font-size: 20px;
-				width: 350 px;
+				width: 375px;
 				padding-top: 7px;
 				padding-bottom: 1px;
-				padding-right: 50px;
+				padding-right: 45px;
 				padding-top: 15px;
 				padding-bottom: 11px;
+				margin-left: 550px;
+				margin-top: 10px;
 
 				">
 
@@ -199,7 +241,7 @@
 
 			<div style='display:inline-block'>
 
-				<textarea style="
+				<textarea id="text" style="
 				font-size: 25px;
 				width: 590px;
 				margin-left: 465px;
@@ -213,7 +255,7 @@
 
 			<div style='display:inline-block'>
 
-				<button type="submit" id="button2" disabled style="
+				<button type="button"  disabled onclick="ButtonAction()" id="button2"  style="
 				font-size: 30px;
 				margin-left: 650px;
 				margin-top: 20px;
