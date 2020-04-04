@@ -4,275 +4,233 @@
 	<title>GenerateXML</title>
 	{% autoescape off %}
 	<script type="text/javascript">
-			
 
-			function File(s1 ,s2)
+			function File()
 			{
-				var classandfield = "{{ my_diction|safe }}";
-				var fileandclass = "{{ link_to_file|safe }}";
-
-
-				
-
-				document.write(fileandclass);
-				
-
-				
-				var s1 = document.getElementById(s1);
-				var s2 = document.getElementById(s2);
-				s2.innerHTML = "";
-
-				var newoption = document.createElement("option");
-				newoption.value = 'val';
-				newoption.innerHTML = "val";
-				s2.options.add(newoption);
-
-
-				
-				var a = document.getElementById('SourceModelFile').value;
-
 				document.getElementById("ModelName").disabled = false;
-			
-			}
 
-			function Model()
-			{
+				var sfile = document.getElementById('SourceModelFile').value;
+				var modelN = document.getElementById('ModelName');
 				
-				document.getElementById("ModelField").disabled = false;
-				document.getElementById("button2").disabled = false;
-				document.getElementById("Commaval").disabled = false;
-				document.getElementById("smodelfield").disabled = false;
-				document.getElementById("Contotype").disabled = false;
+
+
+				{% for file, models in link_to_file.items %}
+					if (sfile == "{{file}}" )
+					{
 					
+						{% for model in models %}
+							var newoption = document.createElement("option");
+							newoption.text = "{{ model }}";
+							modelN.add(newoption);
+						{% endfor %}
+					}
+					
+				{% endfor %}
 			}
+			function Field() {
 
-			function Field()
-			{
-				
+				document.getElementById("modelfield").disabled = false;
+				document.getElementById("smodelfield").disabled = false;
+				var model = document.getElementById('ModelName').value;
+				var sfield = document.getElementById('smodelfield');
+				var mfield = document.getElementById('modelfield');
+				if (sfield.length > 1) {
+					var i;
+					var slen = sfield.options.length;
+					for(i = slen - 1; i > 0; i--){
+							sfield.options[i] = null;
+							mfield.options[i] = null;
+					}
+				}
+				{% for modelName, fieldName in my_diction.items %}
+					if (model == "{{modelName}}") {
+						{% for fields in fieldName %}
+							var option1 = document.createElement("option");
+							var option2 = document.createElement("option");
+							option1.text = '{{ fields }}';
+							option2.text = '{{ fields }}';
+							mfield.add(option1);
+							sfield.add(option2);
+						{% endfor %}
+					}
+				{% endfor %}
+
 			}
-
 	</script>
 	{% endautoescape %}
 </head>
 <body>
 
-
 {% if request.method == 'GET' %}
-
 	<div>
-		
-		<form method="post" enctype="multipart/form-data"> 
+		<form method="post" enctype="multipart/form-data">
 			{% csrf_token %}
-			<label style="position: relative; top:47px;"><h2>sectionFileUpload</h2></label>
-		
-		  <input type="file" name="document" style="
-
-		  height: 80px;
-		  width: 160px;
-		  position: relative;
-		  left: 250px;
-		  top:-5px;
-		  text-align: center;
-		  font-size: 27px;
-
-		  "	>
-	  	<button class="button" type="submit" style="
-
-	  	background-color: #D7D7CE;
-	  	height: 50px;
-	  	width: 150px;
-	  	position: relative;
-	  	left: 400px;
-	  	top: -5px;
-	  	font-size: 25px;
-	  	text-align: center;
-
-	  	">Upload File</button>
-	  
+			<div style='display:inline-block'>
+				<label><h1>sectionFileUpload</h1></label>
+			</div>
+			<div style='display:inline-block'>
+				<input type="file" name="document" style='font-size:32px;margin-left:40px;'>
+			</div>
+		  <div style='display:inline-block'>
+				<button class="button" type="submit" style='font-size:32px'>Upload File</button>
+		  </div>
 	</form>
 	 </br>
 	 {% if url %}
 	<p>Uploaded file : <a href="{{url}}">{{url}}</a></p>
-
 	 {% endif %}
-
-
 	</div>
 	<hr>
-
-
 {% else %}
 
 	<div>
 		<form method="post" enctype="multipart/form-data">
+			<div style='display:inline-block'>
+				<label><h1>sectionCreateXML</h1></label>
+	       </div>
 
-		<label style="
-		position: relative;
-		"><h2>sectionCreateXML</h2></label>
+			<div style='display:inline-block'>
 
-
-
-
-
-
-
-		<label>ModelName</label>
-
-		<select id="ModelName" required disabled onchange="Model()">
-
-			<option value="0" selected disabled>Select</option>
+				<select id="ModelName" onchange='Field()' disabled style="
+				font-size: 25px;
+				width: 300 px;
+				padding-right: 130px;
+				margin-left: 200px;
+				padding-top: 10px;
+				padding-bottom: 10px;
+				max-width: 300px;
 
 
-			
-			
+				">
+					<option value="0" selected disabled >Model Name</option>
+				</select>
 
+			</div>
 
-			{% for x in my_diction %}
-			<option id = 'option1'>{{x}}</option>
-			{% endfor %}
-
-
-			
-		</select>
-
-
-
-
-
-
-
-		<label>SourceModelFile</label>
-
-		<select id="SourceModelFile" onchange="File(this.id , 'ModelName')" autofocus name="SourceModelFile">
-
-			<option value="0" selected disabled >Select</option>
-			
-			{% for items in uploaded_file_list %}
-			<option value=items>{{items}}</option>
-			
-			{% endfor %}
-			
-
-			
-
-			
-
-
-		</select>
-
-
-
-
-
-
-
+			<div style='display:inline-block'>
 		
-		<label>ModelFields</label>
 
-		<select id="ModelField" required disabled>
-
-			<option value="0" selected disabled >Select</option>
-
-			
-		
-		
-			
-		
-		
-		</select>
+				<select id="SourceModelFile" autofocus name="SourceModelFile" onchange="File()" style="
+				font-size: 25px;
+				width: 300 px;
+				padding-top: 10px;
+				padding-bottom: 10px;
+				padding-right: 40px;
 
 
+				">
+					<option value="0" selected disabled >Source Model File</option>
+					{% for items in uploaded_file_list %}
+					<option value={{items}}>{{items}}</option>
+					{% endfor %}
+				</select>
+
+			</div>
+
+			<div style='display:inline-block'>
+
+				<select required disabled id="modelfield" style="
+				font-size: 25px;
+				width: 300 px;
+				padding-right: 142px;
+				margin-left: 465px;
+				padding-top: 10px;
+				padding-bottom: 10px;
 
 
+				">
+					<option value="0" selected disabled >Model Field</option>
+				</select>
+			</div>
+
+			<div style='display:inline-block'>
+
+				<select required disabled id="smodelfield" style="
+				font-size: 25px;
+				width: 300 px;
+				padding-right: 20px;
+				padding-top: 10px;
+				padding-bottom: 10px;
+				padding-right: 57px;
 
 
+				">
+					<option value="0" selected disabled >Source Model Field</option>
+				</select>
+			</div>
+		</br>
+
+			<div style='display:inline-block'>
+
+				<select required id ="Contotype" style="
+				font-size: 25px;
+				width: 300 px;
+				margin-left: 465px;
+				margin-top: 13px;
+				padding-right: 101px;
+				padding-top: 10px;
+				padding-bottom: 10px;
 
 
-		<label>SouceModelFields</label>
+				">
+					<option value="0">Contotype</option>
+					<option value="input-email">input-email</option>
+					<option value="input-password">input-password</option>
+					<option value="select-custom">select-custom</option>
+					<option value="select-fromdb">select-fromdb</option>
+				</select>
 
-		<select required disabled id="smodelfield">
+			</div>
 
+			<div style='display:inline-block'>
 
-			<option value="0" selected disabled >Select</option>
-			
-		</select>
+				<input type="text" placeholder="Comma seperated values" required id ="Commaval" style="
+				font-size: 20px;
+				width: 350 px;
+				padding-top: 7px;
+				padding-bottom: 1px;
+				padding-right: 50px;
+				padding-top: 15px;
+				padding-bottom: 11px;
 
+				">
 
+			</div>
 
+			<div style='display:inline-block'>
 
+				<textarea style="
+				font-size: 25px;
+				width: 590px;
+				margin-left: 465px;
+				margin-top: 50px;
+				height: 180px;
+				border-color: red;
 
+				">Xml Content</textarea>
+			</div>
+		</br>
 
+			<div style='display:inline-block'>
 
+				<button type="submit" id="button2" disabled style="
+				font-size: 30px;
+				margin-left: 650px;
+				margin-top: 20px;
 
+				">Generate XML</button>
 
-		<label>Contotype</label>
-
-		<select required id ="Contotype" disabled>
-
-			<option value="0" selected disabled >Select</option>
-			
-
-			<option value="input-email">input-email</option>
-			
-			<option value="input-password">input-password</option>
-			
-			<option value="select-custom">select-custom</option>
-			
-			<option value="select-fromdb">select-fromdb</option>
-
-
-		</select>
-
-
-
-
-
-
-
-
-
-
-		<input type="text" placeholder="Comma seperated values" required id ="Commaval">
-
-
-
-
-
-
-
-
-		<textarea></textarea>
-
-
-
-
-
-
-
-
-		<button type="submit" id="button2" disabled>Generate XML</button>
-
-
-
-
-
-
+			</div>
 
 	</div>
 </form>
-
 {% endif %}
-
-
 
 {% if context %}
     <script type="text/javascript">
         (function () {window.DJdata = {{context|safe}};})();
     </script>
 {% endif %}
-
-
-
 
 </body>
 </html>
