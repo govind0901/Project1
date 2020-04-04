@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GenerateXML</title>
+	{% autoescape off %}
+	<script type="text/javascript">
+			
+
+			function File(s1 ,s2)
+			{
+				var classandfield = "{{ my_diction|safe }}";
+				var fileandclass = "{{ link_to_file|safe }}";
+
+
+				
+
+				document.write(fileandclass);
+				
+
+				
+				var s1 = document.getElementById(s1);
+				var s2 = document.getElementById(s2);
+				s2.innerHTML = "";
+
+				var newoption = document.createElement("option");
+				newoption.value = 'val';
+				newoption.innerHTML = "val";
+				s2.options.add(newoption);
+
+
+				
+				var a = document.getElementById('SourceModelFile').value;
+
+				document.getElementById("ModelName").disabled = false;
+			
+			}
+
+			function Model()
+			{
+				
+				document.getElementById("ModelField").disabled = false;
+				document.getElementById("button2").disabled = false;
+				document.getElementById("Commaval").disabled = false;
+				document.getElementById("smodelfield").disabled = false;
+				document.getElementById("Contotype").disabled = false;
+					
+			}
+
+			function Field()
+			{
+				
+			}
+
+	</script>
+	{% endautoescape %}
+</head>
+<body>
+
+
+{% if request.method == 'GET' %}
+
+	<div>
+		
+		<form method="post" enctype="multipart/form-data"> 
+			{% csrf_token %}
+			<label style="position: relative; top:47px;"><h2>sectionFileUpload</h2></label>
+		
+		  <input type="file" name="document" style="
+
+		  height: 80px;
+		  width: 160px;
+		  position: relative;
+		  left: 250px;
+		  top:-5px;
+		  text-align: center;
+		  font-size: 27px;
+
+		  "	>
+	  	<button class="button" type="submit" style="
+
+	  	background-color: #D7D7CE;
+	  	height: 50px;
+	  	width: 150px;
+	  	position: relative;
+	  	left: 400px;
+	  	top: -5px;
+	  	font-size: 25px;
+	  	text-align: center;
+
+	  	">Upload File</button>
+	  
+	</form>
+	 </br>
+	 {% if url %}
+	<p>Uploaded file : <a href="{{url}}">{{url}}</a></p>
+
+	 {% endif %}
+
+
+	</div>
+	<hr>
+
+
+{% else %}
+
+	<div>
+		<form method="post" enctype="multipart/form-data">
+
+		<label style="
+		position: relative;
+		"><h2>sectionCreateXML</h2></label>
+
+
+
+
+
+
+
+		<label>ModelName</label>
+
+		<select id="ModelName" required disabled onchange="Model()">
+
+			<option value="0" selected disabled>Select</option>
+
+
+			
+			
+
+
+			{% for x in my_diction %}
+			<option id = 'option1'>{{x}}</option>
+			{% endfor %}
+
+
+			
+		</select>
+
+
+
+
+
+
+
+		<label>SourceModelFile</label>
+
+		<select id="SourceModelFile" onchange="File(this.id , 'ModelName')" autofocus name="SourceModelFile">
+
+			<option value="0" selected disabled >Select</option>
+			
+			{% for items in uploaded_file_list %}
+			<option value=items>{{items}}</option>
+			
+			{% endfor %}
+			
+
+			
+
+			
+
+
+		</select>
+
+
+
+
+
+
+
+		
+		<label>ModelFields</label>
+
+		<select id="ModelField" required disabled>
+
+			<option value="0" selected disabled >Select</option>
+
+			
+		
+		
+			
+		
+		
+		</select>
+
+
+
+
+
+
+
+
+		<label>SouceModelFields</label>
+
+		<select required disabled id="smodelfield">
+
+
+			<option value="0" selected disabled >Select</option>
+			
+		</select>
+
+
+
+
+
+
+
+
+
+		<label>Contotype</label>
+
+		<select required id ="Contotype" disabled>
+
+			<option value="0" selected disabled >Select</option>
+			
+
+			<option value="input-email">input-email</option>
+			
+			<option value="input-password">input-password</option>
+			
+			<option value="select-custom">select-custom</option>
+			
+			<option value="select-fromdb">select-fromdb</option>
+
+
+		</select>
+
+
+
+
+
+
+
+
+
+
+		<input type="text" placeholder="Comma seperated values" required id ="Commaval">
+
+
+
+
+
+
+
+
+		<textarea></textarea>
+
+
+
+
+
+
+
+
+		<button type="submit" id="button2" disabled>Generate XML</button>
+
+
+
+
+
+
+
+	</div>
+</form>
+
+{% endif %}
+
+
+
+{% if context %}
+    <script type="text/javascript">
+        (function () {window.DJdata = {{context|safe}};})();
+    </script>
+{% endif %}
+
+
+
+
+</body>
+</html>
