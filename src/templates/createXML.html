@@ -8,7 +8,8 @@
 			function Control()
 			{
 				document.getElementById("Label").value = '' ;
-				document.getElementById("Commaval").disabled = false;
+				document.getElementById("Commaval").value = '' ;
+				document.getElementById("Commaval").disabled = true;
 				document.getElementById("SourceModelFile").disabled = true;
 				document.getElementById("smodelfield").disabled = true;
 				document.getElementById("SourceModelFile").value = 0;
@@ -16,6 +17,10 @@
 				document.getElementById("button2").disabled = false;
 				document.getElementById("Label").disabled = false;
 				var check = document.getElementById('Contotype').value;
+				if(check == 'select')
+				{
+					document.getElementById("Commaval").disabled = false;
+				}
 				if(check == 'select->fromdb')
 				{
 					document.getElementById("SourceModelFile").disabled = false;
@@ -70,19 +75,25 @@
 				}
 				else
 				{
-					if(Label == '')
+					if(Label == '' || (conto =='select' && csv==''))
 					{
-						alert('Enter Label name also');
+						if(Label =='')
+							alert('Fill Label');
+						if(conto =='select' && csv=='')
+						{
+							alert('Fill comma seperated values');
+						}
 					}
+
 					else 
 					{
-
-						if(csv != '')
-
+						if(conto == 'select')
+						{	
 							var csv = '[' + csv + ']';
+						}
 						else
-							var show = model + '->' + field + '$$' + conto + '$$' + Label;
 
+						csv ='';
 						var show = model + '->' + field + '$$' + conto + csv +'$$' + Label;
 
 						if(text == "")
@@ -100,7 +111,19 @@
 			function File()
 			{
 				document.getElementById("smodelfield").value = 0 ;
-				document.getElementById("Label").value = '' ;		
+				document.getElementById("Label").value = '' ;	
+				var smodel = document.getElementById('SourceModelFile').value;
+				var sfield = document.getElementById('smodelfield');	
+				{% for modelName, fieldName in my_diction.items %}
+					if (smodel == "{{modelName}}") {
+						{% for fields in fieldName %}
+							var option2 = document.createElement("option");
+							option2.text = '{{ fields }}';
+							sfield.add(option2);
+						{% endfor %}
+					}
+				{% endfor %}
+
 			}
 			
 			function Field() {
@@ -110,25 +133,13 @@
 				document.getElementById('Contotype').disabled = false;
 				document.getElementById("modelfield").disabled = false;
 				var model = document.getElementById('ModelName').value;
-				var sfield = document.getElementById('smodelfield');
 				var mfield = document.getElementById('modelfield');
-				if (sfield.length > 1) {
-					var i;
-					var slen = sfield.options.length;
-					for(i = slen - 1; i > 0; i--){
-							sfield.options[i] = null;
-							mfield.options[i] = null;
-					}
-				}
 				{% for modelName, fieldName in my_diction.items %}
 					if (model == "{{modelName}}") {
 						{% for fields in fieldName %}
-							var option1 = document.createElement("option");
-							var option2 = document.createElement("option");
+							var option1 = document.createElement("option");		
 							option1.text = '{{ fields }}';
-							option2.text = '{{ fields }}';
 							mfield.add(option1);
-							sfield.add(option2);
 						{% endfor %}
 					}
 				{% endfor %}
@@ -262,13 +273,14 @@
 
 
 				">
-					<option value="0">Control Types</option>                    
+					<option value="0" selected disabled >Control Types</option>                    
 					<option value="input$$text">input->text</option>
 					<option value="input$$email">input->email</option>
 					<option value="input$$date&time">input->date&time</option>
 					<option value="input$$password">input->password</option>
-					<option value="select$$custom">select->custom</option>
 					<option value="select->fromdb">select->fromdb</option>
+					<option value="select">select</option>
+
 				</select>
 
 			</div style='display:inline-block'>
