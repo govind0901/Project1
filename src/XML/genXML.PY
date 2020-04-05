@@ -31,7 +31,6 @@ def genXML(name):
                             f.write('</Fields>' + '\n')
 
                         startFlag = 1
-                        print(line)
                         
                         modelName  = line.split('(')[0].split(" ")[-1]
                         displayName = line.split('#')[-1].strip()
