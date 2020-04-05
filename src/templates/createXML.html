@@ -5,43 +5,110 @@
 	{% autoescape off %}
 	<script type="text/javascript">
 
+			function Control()
+			{
+				document.getElementById("Label").value = '' ;
+				document.getElementById("Commaval").disabled = false;
+				document.getElementById("SourceModelFile").disabled = true;
+				document.getElementById("smodelfield").disabled = true;
+				document.getElementById("SourceModelFile").value = 0;
+				document.getElementById("smodelfield").value = 0;
+				document.getElementById("button2").disabled = false;
+				document.getElementById("Label").disabled = false;
+				var check = document.getElementById('Contotype').value;
+				if(check == 'select->fromdb')
+				{
+					document.getElementById("SourceModelFile").disabled = false;
+					document.getElementById("smodelfield").disabled = false;
+				}
+			}
+
+			function Button1()
+			{
+				document.getElementById('button').disabled = false;
+			}
+
+			
 			function ButtonAction()
 			{
+				
 				var model = document.getElementById('ModelName').value;
 				var field = document.getElementById('modelfield').value;
 				var conto = document.getElementById('Contotype').value;
+				var csv = document.getElementById('Commaval').value;
 				var Label = document.getElementById('Label').value;
-				var show = model + '->' + field + '$$' + conto + '$$' + Label;
-				document.getElementById('text').value = show;
+				var text = document.getElementById('text').value;
+				var smodel = document.getElementById('SourceModelFile').value;
+				var sfield = document.getElementById('smodelfield').value;
+				var show,show2;
+
+				if(conto == 'select->fromdb')
+				{
+					
+					var show2 = model + '->' + field + '$$' + smodel + '->' + sfield + '$$' + Label;
+
+					if(smodel == 0 || sfield == 0)
+					{
+						alert('Enter both Source Model Name and Source Model Field');
+					}
+
+					else if (Label == '')
+					{
+						alert('Enter label name also');
+					}
+				
+					else
+
+					{
+						document.getElementById('text').disabled = false;
+						if(text == "")
+							document.getElementById('text').value = show2;
+						else
+							document.getElementById('text').value = text + '&&&' + show2;
+					}
+
+				}
+				else
+				{
+					if(Label == '')
+					{
+						alert('Enter Label name also');
+					}
+					else 
+					{
+
+						if(csv != '')
+
+							var csv = '[' + csv + ']';
+						else
+							var show = model + '->' + field + '$$' + conto + '$$' + Label;
+
+						var show = model + '->' + field + '$$' + conto + csv +'$$' + Label;
+
+						if(text == "")
+							document.getElementById('text').value = show;
+						else
+							document.getElementById('text').value = text + '&&&' + show;
+					}
+				}
+			}
+			function Modelf()
+			{
+				document.getElementById('Label').value='';
 			}
 
 			function File()
 			{
-				document.getElementById("ModelName").disabled = false;
-
-				var sfile = document.getElementById('SourceModelFile').value;
-				var modelN = document.getElementById('ModelName');
-				
-
-
-				{% for file, models in link_to_file.items %}
-					if (sfile == "{{file}}" )
-					{
-					
-						{% for model in models %}
-							var newoption = document.createElement("option");
-							newoption.text = "{{ model }}";
-							modelN.add(newoption);
-						{% endfor %}
-					}
-					
-				{% endfor %}
+				document.getElementById("smodelfield").value = 0 ;
+				document.getElementById("Label").value = '' ;		
 			}
+			
 			function Field() {
-
+				document.getElementById("modelfield").value = 0 ;
+				document.getElementById("Contotype").value = 0 ;
+				document.getElementById("Label").value = '' ;
+				document.getElementById('Contotype').disabled = false;
 				document.getElementById("modelfield").disabled = false;
-				document.getElementById("smodelfield").disabled = false;
-				document.getElementById("button2").disabled = false;
 				var model = document.getElementById('ModelName').value;
 				var sfield = document.getElementById('smodelfield');
 				var mfield = document.getElementById('modelfield');
@@ -80,10 +147,10 @@
 				<label><h1>sectionFileUpload</h1></label>
 			</div>
 			<div style='display:inline-block'>
-				<input type="file" name="document" style='font-size:32px;margin-left:40px;'>
+				<input type="file"  onchange="Button1()" name="document" style='font-size:32px;margin-left:40px;'>
 			</div>
 		  <div style='display:inline-block'>
-				<button class="button" type="submit" style='font-size:32px'>Upload File</button>
+				<button class="button" id="button" disabled type="submit" style='font-size:32px'>Upload File</button>
 		  </div>
 	</form>
 	 </br>
@@ -102,7 +169,7 @@
 
 			<div style='display:inline-block'>
 
-				<select id="ModelName" onchange='Field()' style="
+				<select id="ModelName" autofocus onchange='Field()' style="
 				font-size: 25px;
 				width: 300 px;
 			
@@ -126,7 +193,7 @@
 			<div style='display:inline-block'>
 		
 
-				<select id="SourceModelFile" autofocus name="SourceModelFile" style="
+				<select id="SourceModelFile" onchange="File()" disabled name="SourceModelFile" style="
 				font-size: 25px;
 				width: 300 px;
 				padding-top: 10px;
@@ -137,8 +204,8 @@
 
 
 				">
-					<option value="0" selected disabled >Source Model File</option>
-					{% for items in uploaded_file_list %}
+					<option value="0" selected disabled >Source Model Name</option>
+					{% for items in my_diction %}
 					<option value={{items}}>{{items}}</option>
 					{% endfor %}
 				</select>
@@ -147,7 +214,7 @@
 
 			<div style='display:inline-block'>
 
-				<select required disabled id="modelfield" style="
+				<select required disabled id="modelfield" onchange="Modelf()" style="
 				font-size: 25px;
 				width: 300px;
 				margin-left: 465px;
@@ -180,7 +247,7 @@
 
 			<div style='display:inline-block'>
 
-				<select required id ="Contotype" style="
+				<select required  disabled onchange="Control()" id ="Contotype" style="
 				font-size: 25px;
 				width: 300 px;
 				margin-left: 465px;
@@ -195,16 +262,19 @@
 
 
 				">
-					<option value="0">Contotype</option>                    
-					<option value="input$$text">input$$text</option>
-					<option value="input$$email">input$$email</option>
-					<option value="input$$date&time">input$$date&time</option>
-					<option value="select-fromdb">input$$number</option>
+					<option value="0">Control Types</option>                    
+					<option value="input$$text">input->text</option>
+					<option value="input$$email">input->email</option>
+					<option value="input$$date&time">input->date&time</option>
+					<option value="input$$password">input->password</option>
+					<option value="select$$custom">select->custom</option>
+					<option value="select->fromdb">select->fromdb</option>
 				</select>
 
 			</div style='display:inline-block'>
 
-				<input type="text" name="Label" placeholder="Labels" id="Label" style="
+
+				<input type="text" disabled onchange="Labels()" name="Labels" placeholder="Labels" id="Label" style="
 
 				font-size: 25px;
 				width:300px;
@@ -221,14 +291,14 @@
 
 			<div style='display:inline-block'>
 
-				<input type="text" placeholder="Comma seperated values" required id ="Commaval" style="
+				<input type="text" disabled placeholder="Comma seperated values" required id ="Commaval" style="
 				font-size: 20px;
 				width: 375px;
 				padding-top: 7px;
 				padding-bottom: 1px;
 				padding-top: 15px;
 				padding-bottom: 11px;
-				margin-left: 550px;
+				margin-left: 570px;
 				margin-top: 10px;
 
 				">
@@ -237,7 +307,7 @@
 
 			<div style='display:inline-block'>
 
-				<textarea id="text" wrap="soft" readonly style="
+				<textarea id="text" wrap="hard" readonly rows="1" style="
 				font-size: 25px;
 				width: 590px;
 				margin-left: 465px;
@@ -247,11 +317,10 @@
 
 				">Xml Content</textarea>
 			</div>
-		</br>
-
+		
 			<div style='display:inline-block'>
 
-				<button type="button"  disabled onclick="ButtonAction()" id="button2"  style="
+				<button type="button"  disabled onclick="ButtonAction()"  id="button2"  style="
 				font-size: 30px;
 				margin-left: 650px;
 				margin-top: 20px;
