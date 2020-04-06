@@ -18,6 +18,7 @@ def genXML(name):
 
         startFlag = 0
         flag = 0;
+        myflag=0
         f.write('<XML_DOC>' + '\n')
 
         f.write('<Entities>' + '\n\n')
@@ -25,34 +26,37 @@ def genXML(name):
         for line in Lines:
             if line.strip():
                 if line.strip()[0] != '#' and line.strip()[0:3] !="'''":
-                    if flag or re.match('class',line):
-                        flag =1
-                        if re.match('class',line):
-                            f.write(fieldDetails[:-1])
-                            if startFlag:    
-                                f.write('</Fields>' + '\n')
+                    if re.match('class',line) or myflag:
+                        myflag=1
 
-                            startFlag = 1
-                            
-                            modelName  = line.split('(')[0].split(" ")[-1]
-                            displayName = line.split('#')[-1].strip()
-                            stringToAppend = "<Fields type='"+modelName+"' class='EntityProperties' displayProperty='"+displayName+"'>"
+                        if flag or re.match('class',line):
+                            flag =1
+                            if re.match('class',line):
+                                f.write(fieldDetails[:-1])
+                                if startFlag:    
+                                    f.write('</Fields>' + '\n')
 
-                            menuItems.append("<Item class='menus' displayName='"+displayName+"' target='displayRecord.html?entityType="+modelName+"' id='id_"+modelName+"'> </Item>" + '\n')
+                                startFlag = 1
+                                
+                                modelName  = line.split('(')[0].split(" ")[-1]
+                                displayName = line.split('#')[-1].strip()
+                                stringToAppend = "<Fields type='"+modelName+"' class='EntityProperties' displayProperty='"+displayName+"'>"
 
-                            f.write(stringToAppend)
-                            stringToAppend = ""
-                            fieldDetails = ""
-                        else:
-                            fieldDisplayName = ''
-                            if re.match(r'#',line):
-                                fieldDetails += line.split('=')[0].strip()+line.split('#')[1].strip()+","
-                                fieldDisplayName = line.split('#')[1].split('$$')[-1].strip()
-                            fieldName = line.split('=')[0].strip()
-                            fieldDetails += line.split('=')[0].strip() + ','
-                           
-                            fieldProperies.append("<DisplayText class='DisplayText' fieldName='"+modelName+"."+fieldName+"' displayName='"+fieldDisplayName+"'></DisplayText>" + '\n')
-            
+                                menuItems.append("<Item class='menus' displayName='"+displayName+"' target='displayRecord.html?entityType="+modelName+"' id='id_"+modelName+"'> </Item>" + '\n')
+
+                                f.write(stringToAppend)
+                                stringToAppend = ""
+                                fieldDetails = ""
+                            else:
+                                fieldDisplayName = ''
+                                if re.match(r'#',line):
+                                    fieldDetails += line.split('=')[0].strip()+line.split('#')[1].strip()+","
+                                    fieldDisplayName = line.split('#')[1].split('$$')[-1].strip()
+                                fieldName = line.split('=')[0].strip()
+                                fieldDetails += line.split('=')[0].strip() + ','
+                               
+                                fieldProperies.append("<DisplayText class='DisplayText' fieldName='"+modelName+"."+fieldName+"' displayName='"+fieldDisplayName+"'></DisplayText>" + '\n')
+                
         f.write(fieldDetails[:-1])
         f.write('</Fields>' + '\n')
         f.write('</Entities>' + '\n')
