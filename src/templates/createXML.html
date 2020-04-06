@@ -114,6 +114,18 @@
 				document.getElementById("Label").value = '' ;	
 				var smodel = document.getElementById('SourceModelFile').value;
 				var sfield = document.getElementById('smodelfield');	
+
+
+
+				if (sfield.length > 1) {
+					var i;
+					var slen = sfield.options.length;
+					for(i = slen - 1; i > 0; i--){
+							sfield.options[i] = null;
+					}
+				}
+
+
 				{% for modelName, fieldName in my_diction.items %}
 					if (smodel == "{{modelName}}") {
 						{% for fields in fieldName %}
@@ -127,6 +139,8 @@
 			}
 			
 			function Field() {
+				var a = "{{my_diction}}";
+			
 				document.getElementById("modelfield").value = 0 ;
 				document.getElementById("Contotype").value = 0 ;
 				document.getElementById("Label").value = '' ;
@@ -134,6 +148,17 @@
 				document.getElementById("modelfield").disabled = false;
 				var model = document.getElementById('ModelName').value;
 				var mfield = document.getElementById('modelfield');
+
+
+				if (mfield.length > 1) {
+					var i;
+					var slen = mfield.options.length;
+					for(i = slen - 1; i > 0; i--){
+							mfield.options[i] = null;
+					}
+				}
+
+
 				{% for modelName, fieldName in my_diction.items %}
 					if (model == "{{modelName}}") {
 						{% for fields in fieldName %}
