@@ -4,9 +4,16 @@
 	<title>GenerateXML</title>
 	{% autoescape off %}
 	<script type="text/javascript">
+			
+
+        	function Close()
+        	{
+        		document.getElementById('input').disabled = true;
+        	}
 
 			function Control()
 			{
+
 				document.getElementById("Label").value = '' ;
 				document.getElementById("Commaval").value = '' ;
 				document.getElementById("Commaval").disabled = true;
@@ -31,11 +38,13 @@
 			function Button1()
 			{
 				document.getElementById('button').disabled = false;
+				
 			}
 
 			
 			function ButtonAction()
 			{
+				var model = document.getElementById('SubmitIt').disabled = false;
 				
 				var model = document.getElementById('ModelName').value;
 				var field = document.getElementById('modelfield').value;
@@ -101,7 +110,8 @@
 						else
 							document.getElementById('text').value = text + '&&&' + show;
 					}
-				}
+				}	        
+
 			}
 			function Modelf()
 			{
@@ -110,6 +120,8 @@
 
 			function File()
 			{
+				document.getElementById("document").disabled = true;
+				document.getElementById('input').disabled = true;
 				document.getElementById("smodelfield").value = 0 ;
 				document.getElementById("Label").value = '' ;	
 				var smodel = document.getElementById('SourceModelFile').value;
@@ -175,6 +187,7 @@
 </head>
 <body>
 
+
 {% if request.method == 'GET' %}
 	<div>
 		<form method="post" enctype="multipart/form-data">
@@ -183,22 +196,26 @@
 				<label><h1>sectionFileUpload</h1></label>
 			</div>
 			<div style='display:inline-block'>
-				<input type="file"  onchange="Button1()" name="document" style='font-size:32px;margin-left:40px;'>
+				<input type="file"  onchange="Button1()" name="document" id='input' style='font-size:32px;margin-left:40px;'>
 			</div>
 		  <div style='display:inline-block'>
-				<button class="button" id="button" disabled type="submit" style='font-size:32px'>Upload File</button>
+				<button class="button" id="button" disabled type="submit" onchange="Close()" style='font-size:32px'>Upload File</button>
 		  </div>
-	</form>
+		
+
 	 </br>
+	
 	 {% if url %}
 	<p>Uploaded file : <a href="{{url}}">{{url}}</a></p>
 	 {% endif %}
 	</div>
+</form>
+	
 	<hr>
 {% else %}
 
 	<div>
-		<form method="post" enctype="multipart/form-data">
+		
 			<div style='display:inline-block'>
 				<label><h1>sectionCreateXML</h1></label>
 	       </div>
@@ -214,7 +231,6 @@
 				padding-bottom: 10px;
 				max-width: 300px;
 				min-width: 300px;
-
 
 				">
 					<option value="0" selected disabled>Model Name</option>
@@ -237,7 +253,6 @@
 				padding-right: 40px;
 				min-width: 300px;
 				max-width: 300px;
-
 
 				">
 					<option value="0" selected disabled >Source Model Name</option>
@@ -323,7 +338,6 @@
 
 				">
 
-
 			</div>
 
 			<div style='display:inline-block'>
@@ -342,34 +356,69 @@
 
 			</div>
 
-			<div style='display:inline-block'>
+			<form method="post">
+				{% csrf_token %}
+	
 
-				<button type="button"  disabled onclick="ButtonAction()"  id="button2"  style="
+			<div style='display:inline-block'>
+			
+				<button type="button" class="post" onclick="ButtonAction()"  id="button2"  style="
 				font-size: 30px;
-				margin-left: 650px;
+				margin-left: 500px;
 				margin-top: 20px;
+				width: 225px;
+				min-width: 225px;
+				max-width: 225px;
 
 				">Generate XML</button>
 
 			</div>
 
+
+			<div style='display:inline-block'>
+				<a href="http://127.0.0.1:8000/outputs/outputXML.xml" download>
+				<button type="button" class="post" id="download" name="download" style="
+				font-size: 15px;
+				margin-top: 20px;
+				width: 80px;
+				margin-left: 25px;
+				min-width: 50px;
+				max-width: 50px;
+				">Save</button>
+			</a>
+		</div>
+
+			
+
+			<div style='display:inline-block'>
+				<a href="http://127.0.0.1:8000/outputs/outputXML.xml" download>
+				<button type="submit" class="post" onclick="SubmitIt()" id="SubmitIt" name="SubmitIt" style="
+				font-size: 30px;
+				margin-top: 20px;
+				width: 225px;
+				margin-left: 20px;
+				min-width: 225px;
+				max-width: 225px;
+				">Submit</button>
+			</a>
+		</div>
+
+			
 			<div style='display:inline-block'>
 
-				<textarea placeholder="XML Content" id="text" wrap="hard" readonly rows="1" style="
+				<textarea placeholder="XML Content" id="text" wrap="soft" class="post" onchange="Text()" name="text" readonly rows="1" style="
 				font-size: 25px;
 				width: 600px;
 				margin-left: 465px;
 				margin-top: 50px;
 				height: 180px;
 				border-color: red;
-
 				"></textarea>
 			</div>
-		
 			
-
-	</div>
 </form>
+	
+
 {% endif %}
 
 {% if context %}
