@@ -48,5 +48,3 @@ def XML_PAR(xmlfile_name):
 
 
 
-
-
