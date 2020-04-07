@@ -8,7 +8,7 @@ def genXML(name):
     xml_file=xml_file.strip('py') +'xml'
     f=open(xml_file,'w+')
     
-    with open(name) as models:
+    with open(os.path.join('statics' , name)) as models:
         Lines = models.readlines() 
 
         fieldDetails=""
