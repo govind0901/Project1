@@ -120,15 +120,16 @@
 
 			function File()
 			{
-				document.getElementById("document").disabled = true;
-				document.getElementById('input').disabled = true;
-				document.getElementById("smodelfield").value = 0 ;
-				document.getElementById("Label").value = '' ;	
+
+				
+				
+				document.getElementById("smodelfield").value = 0;
+				document.getElementById("Label").value = '';	
 				var smodel = document.getElementById('SourceModelFile').value;
 				var sfield = document.getElementById('smodelfield');	
+				
 
-
-
+				alert("yes");
 				if (sfield.length > 1) {
 					var i;
 					var slen = sfield.options.length;
@@ -142,7 +143,9 @@
 					if (smodel == "{{modelName}}") {
 						{% for fields in fieldName %}
 							var option2 = document.createElement("option");
+
 							option2.text = '{{ fields }}';
+							
 							sfield.add(option2);
 						{% endfor %}
 					}
@@ -232,7 +235,6 @@
 				padding-bottom: 10px;
 				max-width: 300px;
 				min-width: 300px;
-
 				">
 					<option value="0" selected disabled>Model Name</option>
 
@@ -254,7 +256,6 @@
 				padding-right: 40px;
 				min-width: 300px;
 				max-width: 300px;
-
 				">
 					<option value="0" selected disabled >Source Model Name</option>
 					{% for items in my_diction %}
@@ -274,8 +275,6 @@
 				padding-bottom: 10px;
 				max-width: 300px;
 				min-widt: 300px;
-
-
 				">
 					<option value="0" selected disabled >Model Field</option>
 				</select>
@@ -290,7 +289,6 @@
 				padding-bottom: 10px;
 				max-width: 300px;
 				min-width: 300px;
-
 				">
 					<option value="0" selected disabled >Source Model Field</option>
 				</select>
@@ -308,11 +306,7 @@
 				padding-bottom: 10px;
 				max-width: 300px;
 				min-width: 300px;
-
-
 				<!--          Looking for more such option. Please add more options here, if they are             -->
-
-
 				">
 					<option value="0" selected disabled >Control Types</option>                    
 					<option value="input$$text">input->text</option>
@@ -328,7 +322,6 @@
 
 
 				<input type="text" disabled onchange="Labels()" name="Labels" placeholder="Labels" id="Label" style="
-
 				font-size: 25px;
 				width: 296px;
 				padding-top: 9px;
@@ -336,7 +329,6 @@
 				margin-top: 10px;
 				max-width: 296px;
 				min-widt: 296px;
-
 				">
 
 			</div>
@@ -352,7 +344,6 @@
 				padding-bottom: 11px;
 				margin-left: 570px;
 				margin-top: 10px;
-
 				">
 
 			</div>
@@ -370,7 +361,6 @@
 				width: 225px;
 				min-width: 225px;
 				max-width: 225px;
-
 				">Generate XML</button>
 
 			</div>
